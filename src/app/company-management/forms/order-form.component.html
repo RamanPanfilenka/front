@@ -1,0 +1,58 @@
+<head>
+    <script src='../js/sendData.js'></script>
+    <script src="jquery-3.4.1.min.js"></script>
+</head>
+<div class="container">
+    <h2>Order Editor</h2>
+    <form (ngSubmit)="onSubmit()" #orderForm="ngForm">
+        <div class="form-group" *ngIf='existed'>
+            <label for="idLabel">ID</label>
+            <input type="text" class="form-control" id="id" aria-describedby="idLabel" [(ngModel)]="order.id" name="id" #id="ngModel" readonly>
+        </div>
+        <div class="form-group">
+            <label for="productName" id="nameLabel">Order Product Name</label>
+            <input type="text" class="form-control" id="productName" aria-describedby="nameLabel" minlength="2" maxlength="60" required [(ngModel)]="order.productName" name="productName" #productName="ngModel">
+            <div *ngIf="productName.invalid && (productName.dirty || productName.touched)" class="alert alert-danger">
+                <div *ngIf="productName.errors.required">Order Product Name is required.</div>
+                <div *ngIf="productName.errors.minlength">Order Product Name must be at least 2 characters long.</div>
+            </div>
+            <label for="deliver" id="nameLabel">Order Deliver</label>
+            <input type="text" class="form-control" id="deliver" aria-describedby="nameLabel" minlength="2" maxlength="60" required [(ngModel)]="order.deliver" name="deliver" #deliver="ngModel">
+            <div *ngIf="deliver.invalid && (deliver.dirty || deliver.touched)" class="alert alert-danger">
+                <div *ngIf="deliver.errors.required">Order Deliver is required.</div>
+                <div *ngIf="deliver.errors.minlength">Order Deliver must be at least 2 characters long.</div>
+            </div>
+            <label for="companyId" id="codeLabel">Order Company Id (Current Company ID: <span id="compayIdSpan"></span>)</label>
+            <input type="text" class="form-control" id="companyId" aria-describedby="codeLabel" required [(ngModel)]="order.companyId" name="companyId" #companyId="ngModel">
+            <div *ngIf="companyId.invalid && (companyId.dirty || companyId.touched)" class="alert alert-danger">
+                <div *ngIf="companyId.errors.required">Order Company Id is required.</div>
+            </div>
+            <label for="productId" id="codeLabel">Order Product Id</label>
+            <input type="text" class="form-control" id="productId" aria-describedby="codeLabel" required [(ngModel)]="order.productId" name="productId" #productId="ngModel">
+            <div *ngIf="productId.invalid && (productId.dirty || productId.touched)" class="alert alert-danger">
+                <div *ngIf="productId.errors.required">Order Product Id is required.</div>
+            </div>
+        </div>
+        <div class="form-group" *ngIf='existed'>
+            <label for="lastUpdated" id="lastUpdatedLabel">Last Update</label>
+            <input type="text" class="form-control" id="lastUpdated" aria-describedby="lastUpdatedLabel" required [(ngModel)]="order.lastUpdated" name="lastUpdated" #lastUpdated="ngModel" readonly>
+        </div>
+        <div class="from-group">
+            <div class="btn-toolbar" role="toolbar" aria-label="Action buttons">
+                <div class="btn-group mr-1" role="group" aria-label="Cancel group">
+                    <button type="button" class="btn btn-primary" (click)="onCancel()">Back</button>
+                </div>
+                <div class="btn-group mr-4" role="group" aria-label="Save group">
+                    <button [disabled]="!orderForm.valid" type="submit" class="btn btn-primary" id="save">Save</button>
+                </div>
+                <div class="btn-group mr-1" role="group" aria-label="Delete group" *ngIf="existed && !order.isDeleted">
+                    <button type="button" class="btn btn-warning" (click)="onDelete()">Delete</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Purge group" *ngIf="existed && order.isDeleted">
+                    <button type="button" class="btn btn-warning" (click)="onUndelete()">Undelete</button>
+                    <button type="button" class="btn btn-danger" (click)="onPurge()">Purge</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

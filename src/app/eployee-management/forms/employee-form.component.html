@@ -1,0 +1,70 @@
+<head>
+    <script src='../js/sendData.js'></script>
+    <script src="jquery-3.4.1.min.js"></script>
+</head>
+<div class="container">
+    <h2>Employee Editor</h2>
+    <form (ngSubmit)="onSubmit()" #employeeForm="ngForm">
+        <div class="form-group" *ngIf='existed'>
+            <label for="idLabel">ID</label>
+            <input type="text" class="form-control" id="id" aria-describedby="idLabel" [(ngModel)]="employee.id" name="id" #id="ngModel" readonly>
+        </div>
+        <div class="form-group">
+            <label for="firstName" id="nameLabel">Employee First Name</label>
+            <input type="text" class="form-control" id="firstName" aria-describedby="nameLabel" minlength="2" maxlength="60" required [(ngModel)]="employee.firstName" name="firstName" #firstName="ngModel">
+            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger">
+                <div *ngIf="firstName.errors.required">Empoyee First Name is required.</div>
+                <div *ngIf="firstName.errors.minlength">Empoyee First Name must be at least 2 characters long.</div>
+            </div>
+            <label for="lastName" id="nameLabel">Employee Last Name</label>
+            <input type="text" class="form-control" id="lastName" aria-describedby="nameLabel" minlength="2" maxlength="60" required [(ngModel)]="employee.lastName" name="lastName" #lastName="ngModel">
+            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger">
+                <div *ngIf="lastName.errors.required">Empoyee Last Name is required.</div>
+                <div *ngIf="lastName.errors.minlength">Empoyee Last Name must be at least 2 characters long.</div>
+            </div>
+            <label for="code" id="codeLabel">Employee Code</label>
+            <input type="text" class="form-control" id="code" aria-describedby="codeLabel" minlength="5" maxlength="5" required [(ngModel)]="employee.code" name="code" #code="ngModel">
+            <div *ngIf="code.invalid && (code.dirty || code.touched)" class="alert alert-danger">
+                <div *ngIf="code.errors.required">Employee Code is required.</div>
+                <div *ngIf="code.errors.minlength">Employee Code must be at least 5 characters long.</div>
+            </div>
+            <label for="managerId" id="managerIdLabel">Manager ID (Current Manager ID directory: <span class="currentId"></span>)</label>
+            <input type="text" class="form-control" id="managerId" aria-describedby="managerIdLabel" min="0" required [(ngModel)]="employee.managerId" name="managerId" #managerId="ngModel">
+            <div *ngIf="managerId.invalid && (managerId.dirty || managerId.touched)" class="alert alert-danger">
+                <div *ngIf="managerId.errors.required">Manager ID is required.</div>
+                <div *ngIf="managerId.errors.minlength">Manager ID must be at greter than 0 characters long.</div>
+            </div>
+            <div class="file-outload" *ngIf='existed'>
+                <label for="managerId" id="managerIdLabel">Photo</label>
+                <div>
+                    <input type='file' id="upload" />
+                    <div class="avatar">
+                        <img src="assets/img/765-default-avatar.png" id="avatar-img" style="margin-top: 20px;width: 20%;display: inline-block;height: 20%;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group" *ngIf='existed'>
+            <label for="lastUpdated" id="lastUpdatedLabel">Last Update</label>
+            <input type="text" class="form-control" id="lastUpdated" aria-describedby="lastUpdatedLabel" required [(ngModel)]="employee.lastUpdated" name="lastUpdated" #lastUpdated="ngModel" readonly>
+        </div>
+        <div class="from-group">
+            <div class="btn-toolbar" role="toolbar" aria-label="Action buttons">
+                <div class="btn-group mr-1" role="group" aria-label="Cancel group">
+                    <button type="button" class="btn btn-primary" (click)="onCancel()">Back</button>
+                </div>
+                <div class="btn-group mr-4" role="group" aria-label="Save group">
+                    <button [disabled]="!employeeForm.valid" type="submit" class="btn btn-primary" id="save">Save</button>
+                </div>
+                <div class="btn-group mr-1" role="group" aria-label="Delete group" *ngIf="existed && !employee.isDeleted">
+                    <button type="button" class="btn btn-warning" (click)="onDelete()">Delete</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Purge group" *ngIf="existed && employee.isDeleted">
+                    <button type="button" class="btn btn-warning" (click)="onUndelete()">Undelete</button>
+                    <button type="button" class="btn btn-danger" (click)="onPurge()">Purge</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
